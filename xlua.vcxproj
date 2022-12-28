@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="log.cpp" />
     <ClCompile Include="src\lua_helpers.cpp" />
     <ClCompile Include="src\module.cpp" />
     <ClCompile Include="src\xlua.cpp" />
@@ -28,6 +29,7 @@
     <ClCompile Include="src\xptimers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="log.h" />
     <ClInclude Include="lua_sdk\lauxlib.h" />
     <ClInclude Include="lua_sdk\lua.h" />
     <ClInclude Include="lua_sdk\luaconf.h" />
@@ -161,7 +163,7 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Release\32\xlua.lib</ImportLibrary>
-      <AdditionalLibraryDirectories>SDK\Libraries\Win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>SDK\Libraries\Win;LuaJIT-2.1.0\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM.lib;XPWidgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -203,8 +205,8 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Release\64\xlua.lib</ImportLibrary>
-      <AdditionalLibraryDirectories>SDK\Libraries\Win;lua_sdk;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Opengl32.lib;XPLM_64.lib;XPWidgets_64.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>SDK\Libraries\Win;LuaJIT-2.1.0\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Opengl32.lib;XPLM_64.lib;XPWidgets_64.lib;luajit.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -247,8 +249,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Debug\32\xlua.lib</ImportLibrary>
-      <AdditionalLibraryDirectories>SDK\Libraries\Win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM.lib;XPWidgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>SDK\Libraries\Win;LuaJIT-2.1.0\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM.lib;XPWidgets.lib;luajit.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
@@ -291,7 +293,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Debug\64\xlua.lib</ImportLibrary>
-      <AdditionalLibraryDirectories>SDK\Libraries\Win;lua_sdk;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>SDK\Libraries\Win;LuaJIT-2.1.0\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Opengl32.lib;XPLM_64.lib;XPWidgets_64.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
