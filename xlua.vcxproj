@@ -29,7 +29,6 @@
     <ClCompile Include="src\xptimers.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="log.h" />
     <ClInclude Include="lua_sdk\lauxlib.h" />
     <ClInclude Include="lua_sdk\lua.h" />
     <ClInclude Include="lua_sdk\luaconf.h" />
