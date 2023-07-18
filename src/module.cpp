@@ -108,7 +108,7 @@ static void destroy_alloc_block(module_alloc_block * head)
 if(errcode != 0) { \
 	const char * s = lua_tostring(m_interp, -1); \
 	printf("%s\n%s failed: %d\n",s,msg,errcode); \
-	XPLMDebugString(msg); \
+	log_message("%s\n%s failed: %d\n",s,msg,errcode);\
 	lua_close(m_interp); \
 	m_interp = NULL; \
 	return; }
