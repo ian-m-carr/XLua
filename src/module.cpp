@@ -106,9 +106,9 @@ static void destroy_alloc_block(module_alloc_block * head)
 
 #define CTOR_FAIL(errcode,msg) \
 if(errcode != 0) { \
-	const char * s = lua_tostring(m_interp, -1); \
-	printf("%s\n%s failed: %d\n",s,msg,errcode); \
-	log_message("%s\n%s failed: %d\n",s,msg,errcode);\
+	const char *errmsg = lua_tostring(m_interp, -1); \
+	XPLMDebugString((get_log_prefix('E') + "Error during " + msg + " '" + m_log_path + "'\n").c_str()); \
+	log_message(m_interp,"%s\n%s failed: %d\n",errmsg,msg,errcode); \
 	lua_close(m_interp); \
 	m_interp = NULL; \
 	return; }
@@ -126,9 +126,6 @@ module::module(
 	int boiler_plate_paths = length_of_dir(in_init_script);
 	m_log_path = in_module_script + boiler_plate_paths;
 
-	printf("Running %s\n", m_log_path.c_str());
-	log_message("Running %s\n", m_log_path.c_str());
-
 	m_interp = luaL_newstate();
 
 	if(m_interp == NULL)
@@ -139,8 +136,10 @@ module::module(
 	luaL_openlibs(m_interp);
 
     xlua_pushuserdata(m_interp, this);
-	lua_setglobal(m_interp, "__module_ptr");		
-		
+	lua_setglobal(m_interp, "__module_ptr");
+
+	log_message(m_interp, "Running %s\n", m_log_path.c_str());
+
 	add_xpfuncs_to_interp(m_interp);
 	
 	// Mobile devices like Android don't use a regular file system...they have a bundle of resources in-memory so
@@ -150,10 +149,8 @@ module::module(
 		CTOR_FAIL(-1, "load init script");
 	
 	m_debug_proc = lua_pushtraceback(m_interp);
-
-	// IMC - init file path corrected for traceback
-	std::string init_log_path = in_init_script + boiler_plate_paths;
-	int load_result = luaL_loadbuffer(m_interp, (const char*)linit.begin(), linit.size(), init_log_path.c_str());
+	
+	int load_result = luaL_loadbuffer(m_interp, (const char*)linit.begin(), linit.size(), in_init_script + boiler_plate_paths);
 	CTOR_FAIL(load_result, "load init script")
 
 	int init_script_result = lua_pcall(m_interp, 0, 0, m_debug_proc);
@@ -251,13 +248,14 @@ void module::do_callout(const char * f)
 {
 	if(m_interp == NULL)
 		return;
+
 	lua_getfield(m_interp, LUA_GLOBALSINDEX, "do_callout");
-	if(lua_isnil(m_interp, -1))
+	if (!lua_isfunction(m_interp, -1))
 	{
 		lua_pop(m_interp, 1);
 	}
 	else
-	{	
+	{
 		fmt_pcall_stdvars(m_interp,m_debug_proc,"s",f);
 	}
 }
@@ -267,7 +265,6 @@ module::~module()
 	if(m_interp)
 		lua_close(m_interp);
 	destroy_alloc_block(m_memory);
-		
 }
 
 #if !MOBILE

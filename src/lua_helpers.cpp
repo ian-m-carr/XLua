@@ -87,7 +87,8 @@ static int traceback(lua_State * L)
 	lua_call(L,2,1);
 
 	// IMC make sure we see the message in the log file!
-	log_message("traceback: %s\n", lua_tostring(L, -1));
+	// Pass nullptr here so we don't get a duplicate stack trace.
+	log_message(nullptr, "traceback: %s\n", lua_tostring(L, -1));
 
 //	lua_getfield(L, LUA_GLOBALSINDEX, "STP");
 //	lua_getfield(L, -1, "stacktrace");
@@ -147,11 +148,12 @@ int vfmt_pcall(lua_State * L, int dbg, const char * fmt, va_list va)
 	if(e != 0)
 	{
 		const char* msg = lua_tostring(L, -1);
-
-		printf("%s\n", msg);
-		log_message("lua call failed code: %d, msg: %s\n", e, msg);
-
-		lua_pop(L,-1);
+		if (!dbg)
+		{
+			// In dbg mode the traceback handler will have been called, which already prints this message.
+			log_message(L, "lua call failed code: %d, msg: %s\n", e, msg);
+		}
+		lua_pop(L, 1);
 	}
 	return e;
 }

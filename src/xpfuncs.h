@@ -11,7 +11,8 @@
 #ifndef xpfuncs_h
 #define xpfuncs_h
 
-#include <cstring>
+#include <string>
+#include <string.h>
 
 extern "C" {
 #include <lua.h>
@@ -19,20 +20,21 @@ extern "C" {
 };
 
 void	add_xpfuncs_to_interp(lua_State * interp);
+std::string get_log_prefix(char l='I');
 
 template <typename T>
 T xlua_checkuserdata(lua_State * L, int narg, const char * msg)
 {
-    void * ret = lua_touserdata(L, narg);
+    T* ret = static_cast<T*>(lua_touserdata(L, narg));
     if(ret == NULL)
         luaL_argerror(L, narg, msg);
-    return *((T*)ret);
+    return *ret;
 }
 
 template<typename T>
 void xlua_pushuserdata(lua_State * state, T data)
 {
-    void* ud = lua_newuserdata(state, sizeof(T));
+    T* ud = static_cast<T*>(lua_newuserdata(state, sizeof(T)));
     memcpy(ud, &data, sizeof(T));
 }
 

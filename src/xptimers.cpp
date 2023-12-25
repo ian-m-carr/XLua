@@ -29,13 +29,12 @@ struct xlua_timer {
 
 static xlua_timer * s_timers = nullptr;
 
-xlua_timer * xlua_create_timer(xlua_timer_f func, void * ref)
+xlua_timer * xlua_create_timer(lua_State *L, xlua_timer_f func, void * ref)
 {
 	for(xlua_timer * t = s_timers; t; t = t->m_next)
 	if(t->m_func == func && t->m_ref == ref)
 	{
-		printf("ERROR: timer already exists.");
-		log_message("ERROR: timer already exists.");
+		log_message(L, "ERROR: timer already exists.");
 		return NULL;
 	}
 
@@ -67,6 +66,15 @@ int xlua_is_timer_scheduled(xlua_timer * t)
 	return 1;	
 }
 
+double xlua_get_timer_remaining(xlua_timer* t)
+{
+	if (t == nullptr || t->m_next_fire_time < 0)
+	{
+		return -1.0;
+	}
+
+	return t->m_next_fire_time - xlua_get_simulated_time();
+}
 
 void xlua_do_timers_for_time(double now)
 {
