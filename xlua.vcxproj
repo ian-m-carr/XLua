@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="log.cpp" />
     <ClCompile Include="src\lua_helpers.cpp" />
     <ClCompile Include="src\module.cpp" />
     <ClCompile Include="src\xlua.cpp" />
